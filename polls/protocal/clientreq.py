@@ -42,3 +42,14 @@ class ProfileRsp(object):
 
     def toJson(self):
         return json.dumps(self.__dict__)
+
+class SearchRsp(object):
+
+    def __init__(self,id,account,nick,sex,sign):
+        self.userid = id
+        self.account = account
+        self.nick = nick
+        self.sex = sex
+        self.sign = sign
+
+

@@ -1,13 +1,14 @@
+import json
+
 from django.http import HttpRequest
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
-from django.http import HttpResponse
+from django.http import HttpResponse,FileResponse
 
 from polls.models import User
-from polls.protocal.clientreq import RegMsg, RegRsp, ProfileRsp, ProfileReq
+from polls.protocal.clientreq import RegMsg, RegRsp, ProfileRsp, ProfileReq,SearchRsp
 from smartlib import smartstring
-
 
 @csrf_exempt
 def regUser(request):
@@ -39,8 +40,8 @@ def logUser(request):
         logMsg.parse(request.body)
         u = checkUser(logMsg.account,logMsg.password)
         if u is not None:
-            rsp.Code = 0
-            rsp.Userid = u.id
+            rsp.code = 0
+            rsp.userid = u.id
         return HttpResponse(rsp.toJson())
     else:
         return HttpResponse(rsp.toJson())
@@ -77,8 +78,36 @@ def profile(request):
             rsp.account = u.account
         return HttpResponse(rsp.toJson())
 
-
+@csrf_exempt
 def photo(request):
+    if smartstring.equals_ingorecase(request.method,"POST"):
+        userid =  request.POST["user"]
+        headphoto = request.FILES["headphoto"]
+        handle_upload_file(userid,headphoto)
+        return HttpResponse("")
+    elif smartstring.equals_ingorecase(request.method,"GET"):
+        userid = request.GET["user"]
+        filename = "headphoto/"+userid+"_head.png"
+        return FileResponse(open(filename),"rb")
+
+@csrf_exempt
+def search(request):
+    if smartstring.equals_ingorecase(request.method,"POST"):
+        userid = request.body
+        users = User.objects.all()
+        searchs = [SearchRsp(u.id,u.account,u.nick,u.sex,u.signature) for u in users]
+        rsp = json.dumps([s.__dict__ for s in searchs])
+        return HttpResponse(rsp)
+
+
+
+def handle_upload_file(userid,headphoto):
+    with open("headphoto/"+userid+"_head.png",'wb+') as destination:
+        for chunk in headphoto.chunks():
+            destination.write(chunk)
+        
+
+
 
 
 def getUserById(id):
