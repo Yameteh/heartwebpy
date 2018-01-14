@@ -14,3 +14,4 @@ class User(models.Model):
     longitude = models.CharField(max_length=32,default="0")
     curbind = models.IntegerField(null=False,default=0)
     lastbind = models.TextField(null=False,default="")
+    token = models.TextField(null=False,default="")

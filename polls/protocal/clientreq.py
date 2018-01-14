@@ -21,6 +21,16 @@ class RegRsp(object):
     def toJson(self):
         return json.dumps(self.__dict__)
 
+class LogRsp(object):
+
+    def __init__(self,code,uid,token):
+        self.code = code
+        self.userid = uid
+        self.token = token
+
+    def toJson(self):
+        return json.dumps(self.__dict__)
+
 class ProfileReq(object):
 
     def parse(self,data):
