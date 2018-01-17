@@ -63,3 +63,13 @@ class SearchRsp(object):
         self.sign = sign
 
 
+class ImageRsp(object):
+
+    def __init__(self,url):
+        self.src_url = url
+
+
+    def toJson(self):
+        return json.dumps(self.__dict__)
+
+

@@ -8,3 +8,7 @@ def equals_ingorecase(s,d):
         return s.upper() == d.upper()
     except AttributeError:
         return s == d
+
+
+def unicode2str(u_str):
+    return u_str.encode('unicode-escape').decode('string_escape')

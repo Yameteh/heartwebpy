@@ -26,7 +26,10 @@ SECRET_KEY = 'zsmmsq=832n(df-x)m*8)%1yso6(l(zzcr$*bphrikjf%riktg'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '172.25.1.135'
+    '172.25.1.135',
+    '172.25.1.50',
+    '127.0.0.1',
+    '10.42.0.1'
 ]
 
 
@@ -50,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'polls.middleware.authmiddleware.AuthMiddleware'
 ]
 
 ROOT_URLCONF = 'mysite.urls'
@@ -102,6 +106,21 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+        },
+    },
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
